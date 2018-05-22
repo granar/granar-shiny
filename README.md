@@ -1,6 +1,3 @@
-# CrossSim
-simulator of root cross section 
+# Generator of Root ANAtomy in R [GRANAR]
 
-find it at https://plantmodelling.shinyapps.io/CrossSim/
-
-IN DEVELOPMENT
+This package contains the code to the demonstration shiny app for the [package GRANAR](https://github.com/granar/granar) (Generator of Root ANAtomy in R)

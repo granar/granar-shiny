@@ -1,0 +1,12 @@
+name: granar
+title: granar
+username:
+account: plantmodelling
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 347095
+bundleId: 1386886
+url: https://plantmodelling.shinyapps.io/granar/
+when: 1526996444.43017
+asMultiple: FALSE
+asStatic: FALSE
