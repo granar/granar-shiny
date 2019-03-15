@@ -32,7 +32,7 @@ sim <- simcross(random,
 
 write_sim_xml(sim, "~/Desktop/root.xml")
 
-nodes %>% 
+sim$nodes %>% 
   # filter(id_cell == 9) %>% 
   ggplot() + 
   geom_polygon(aes(x, y, group=id_cell, fill=type), colour="white") + 

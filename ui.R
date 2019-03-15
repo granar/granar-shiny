@@ -43,45 +43,48 @@ shinyUI(fluidPage(
                                       tags$hr(),
                                       helpText("Parameters for the cortex. You can adjust the number of cell layers and the size of individual cells"),
                                       tags$hr(),
-                                      numericInput("n_cortex", "Layers:", num_cortex, min = 1, max = 100, step = 1),
-                                      numericInput("s_cortex", "Diameter:", diam_cortex, min = 0.1, max = 1, step = 0.1)),
+                                      sliderInput("n_cortex", "Layers:", num_cortex, min = 1, max = 15, step = 1),
+                                      sliderInput("s_cortex", "Diameter:", diam_cortex, min = round(diam_cortex/3, 3), max = diam_cortex*2, step = 0.01)),
                              tabPanel("Stele",
                                       tags$hr(),
                                       helpText("Parameters for the stele. You can adjust the total diameter of the stele and the size of individual cells"),
                                       tags$hr(),
-                                      numericInput("s_stele", "Diameter of stele:", size_stele, min = 0.5, max = 5, step = 0.1),
-                                      numericInput("ss_stele", "Diameter of cells:", diam_stele, min = 0.1, max = 1, step = 0.1)),
+                                      sliderInput("s_stele", "Diameter of stele:", size_stele, min = round(size_stele/3, 3), max = size_stele*2, step = 0.01),
+                                      sliderInput("ss_stele", "Diameter of cells:", diam_stele, min = round(diam_stele/3, 3), max = diam_stele*2, step = 0.01)),
                              tabPanel("Xylem",
                                       tags$hr(),
                                       helpText("Parameters for the xylem vessels. You can adjust the number of xylem vessel files"),
                                       tags$hr(),
-                                      numericInput("n_xylem", "Number of files:", n_xylem_files, min = 2, max = 6, step = 1),
-                                      numericInput("s_xylem", "Max size of vessels:", diam_xylem, min = 0.1, max = 0.8, step = 0.1)),
+                                      sliderInput("n_xylem", "Number of files:", n_xylem_files, min = 2, max = 6, step = 1),
+                                      sliderInput("s_xylem", "Max size of vessels:", diam_xylem, min = round(diam_xylem/3, 3), max = diam_xylem*2, step = 0.01)),
+                             
                              tabPanel("Aerenchyma",
                                       tags$hr(),
                                       helpText("Parameters for the production of aerenchyma. You can adjust the number of aerenchyma files and the total proportion of aerenchyma within the cortex."),
                                       tags$hr(),
-                                      sliderInput("aerenchyma",
-                                         "Proportion of aerenchyma [%]",
-                                         min = 0,
-                                         max = 90,
-                                         value = proportion_aerenchyma),
-                                      numericInput("n_aerenchyma", "Number of files:", n_aerenchyma_files, min = 1, max = 20, step = 1))
+                                      helpText("Creating aerenchyme take time in GRANAR. Be patient!"),
+                                      tags$hr(),
+                                      sliderInput("aerenchyma", "Proportion of aerenchyma [%]", min = 0, max = 30, value = proportion_aerenchyma),
+                                      sliderInput("n_aerenchyma", "Number of files:", n_aerenchyma_files, min = 1, max = 20, step = 1))
                  ),
                  tags$hr(),
-                 sliderInput("random",
-                      "Randomness of cell positions [%]",
-                      min = 0,
-                      max = 5,
-                      value = random),
+                 selectInput("planttype", label = "Plant type", choices = c("monocot"=1, 'dicot'=2)),
+                 helpText("You can choose here wether to simulate a dicot or monocot plant"),
+                 # sliderInput("random",
+                 #      "Randomness of cell positions [%]",
+                 #      min = 0,
+                 #      max = 5,
+                 #      value = random),
                  tags$hr(),
-                 bsButton(inputId = "refresh", type = "action", style="primary", label="Refresh",icon("recycle"))
+                 bsButton(inputId = "refresh", type = "action", style="primary", label="Refresh",icon("recycle")),
+                 tags$hr(),
+                 img(src='logo.png', align = "left", width="100%")
           ),
     
           # Show a plot of the generated distribution
           column(8,    
             selectInput("toplot", "Variable to display", choices=c("Type"="type", 
-                                                                   "Area" = "dir.area", 
+                                                                   "Area" = "area", 
                                                                    "Distance from center" = "dist",
                                                                    "Cell ID" = "id_cell",
                                                                    "Angle" = "angle")),
@@ -96,6 +99,33 @@ shinyUI(fluidPage(
             tags$hr()
           )
         )
+     ),
+     tabPanel("About", id="tab1", icon = icon("plus"),
+              fluidRow(
+                column(3),
+                column(6,
+                       
+                       h4("Cite us"),
+                       tags$hr(),
+                       tags$strong("GRANAR, a new computational tool to better understand the functional importance of root anatomy (2019)"),
+                       helpText("Adrien Heymans, Valentin Couvreur, Therese LaRue, Ana Paez, Guillaume Lobet"),
+                       actionButton(inputId='ab1', label="View paper", icon = icon("flask"), onclick ="window.open('#', '_blank')"),
+                       
+                       tags$hr(),
+                       
+                       h4("Licence"),
+                       tags$hr(),
+                        helpText("GRANAR is free to use and released under a GPL licence. It means that redistribution and use in source and binary forms, with or without modification, are permitted under the GNU General Public License v2 and provided that the following conditions are met:"),
+                               
+                       helpText("1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer."),
+                               
+                       helpText("2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution."),
+                               
+                        helpText("3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission."),  
+                       actionButton(inputId='ab1', label="View source code", icon = icon("flask"), onclick ="window.open('https://github.com/granar', '_blank')"),
+                       tags$hr()
+                )
+              )
      )
   )
 ))

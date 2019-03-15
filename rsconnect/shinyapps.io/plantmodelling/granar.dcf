@@ -5,8 +5,8 @@ account: plantmodelling
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 347095
-bundleId: 1386886
+bundleId: 1942269
 url: https://plantmodelling.shinyapps.io/granar/
-when: 1526996444.43017
+when: 1552653592.77511
 asMultiple: FALSE
 asStatic: FALSE

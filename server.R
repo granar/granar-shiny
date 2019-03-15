@@ -30,16 +30,7 @@ shinyServer(
   function(input, output, clientData, session) {  
   
     withProgress(message = "Computing cells", {
-      
-      dat <- reactiveValues(cell_data = simcross(random, 
-                                               num_cortex = num_cortex,
-                                               diam_cortex = diam_cortex,
-                                               size_stele = size_stele,
-                                               diam_stele = diam_stele,
-                                               proportion_aerenchyma = proportion_aerenchyma/100,
-                                               n_aerenchyma_files = n_aerenchyma_files,
-                                               n_xylem_files = n_xylem_files,
-                                               diam_xylem = diam_xylem))
+      dat <- reactiveValues(cell_data = create_anatomy(parameters = params, verbatim=F))
     })
   
     ## MODEL -----
@@ -47,15 +38,19 @@ shinyServer(
       
       withProgress(message = "Computing cells", {
         
-          dat$cell_data <- simcross(input$random, 
-                                num_cortex = input$n_cortex,
-                                diam_cortex = input$s_cortex,
-                                size_stele = input$s_stele,
-                                diam_stele = input$ss_stele,
-                                proportion_aerenchyma = input$aerenchyma/100,
-                                n_aerenchyma_files = input$n_aerenchyma,
-                                n_xylem_files = input$n_xylem,
-                                diam_xylem = input$s_xylem)  
+          # Update the parameters with user values  
+          params$value[params$name == "planttype" & params$type == "param"] <- as.numeric(input$planttype)
+          params$value[params$name == "aerenchyma" & params$type == "proportion"] <- input$aerenchyma/100
+          params$value[params$name == "aerenchyma" & params$type == "n_files"]    <- input$n_aerenchyma
+          params$value[params$name == "cortex" & params$type == "cell_diameter"]  <- input$s_cortex
+          params$value[params$name == "cortex" & params$type == "n_layers"]       <- input$n_cortex
+          params$value[params$name == "xylem" & params$type == "n_files"]         <- input$n_xylem
+          params$value[params$name == "xylem" & params$type == "max_size"]        <- input$s_xylem
+          params$value[params$name == "stele" & params$type == "cell_diameter"]   <- input$ss_stele
+          params$value[params$name == "stele" & params$type == "layer_diameter"]  <- input$s_stele
+
+          # Create new anatomy
+          dat$cell_data <- create_anatomy(parameters = params, verbatim=F)  
       })
     })
     
@@ -122,7 +117,7 @@ shinyServer(
       },
       content = function(file) {
         if(is.null(dat$cell_data)){return ()}
-        write_sim_xml(dat$cell_data, path=file)
+        write_anatomy_xml(dat$cell_data, path=file)
       }
     ) 
     

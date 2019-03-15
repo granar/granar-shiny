@@ -25,23 +25,36 @@
 
 
 
-source("www/simcross_model.R")
+source("www/create_anatomy.R")
+source("www/read_param_xml.R")
+source("www/write_anatomy_xml.R")
+
+# devtools::install_github("granar/granar")
+# library(granar)
 
 library(shinyBS)
 library(viridis)
 library(deldir)
 library(tidyverse)
 library(plyr)
-
+library(xml2)
+library(alphahull)
+library(sp)
+library(cowplot)
+library(retistruct)
+library(Hmisc)
 
 # Init values
 
+params <- read_param_xml("www/Zea_mays_Heymans_2019.xml")
+
 random <- 4
-num_cortex <- 2
-diam_cortex <- 0.4
-size_stele <- 2
-diam_stele <- 0.2
-proportion_aerenchyma <- 0
-n_aerenchyma_files <- 10
-n_xylem_files <- 2
-diam_xylem <- 0.6
+proportion_aerenchyma  <- params$value[params$name == "aerenchyma" & params$type == "proportion"] * 100
+n_aerenchyma_files      <- params$value[params$name == "aerenchyma" & params$type == "n_files"]
+diam_cortex             <- params$value[params$name == "cortex" & params$type == "cell_diameter"]
+num_cortex              <- params$value[params$name == "cortex" & params$type == "n_layers"]
+n_xylem_files           <- params$value[params$name == "xylem" & params$type == "n_files"]
+diam_xylem              <- params$value[params$name == "xylem" & params$type == "max_size"]
+diam_stele              <- params$value[params$name == "stele" & params$type == "cell_diameter"]
+size_stele              <- params$value[params$name == "stele" & params$type == "layer_diameter"]
+
